@@ -1,0 +1,78 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Apr  6 01:16:30 2020
+
+@author: Leo
+"""
+
+#%%
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+plt.style.use('classic')
+plt.rcParams['figure.facecolor'] = '1'
+
+
+def prebarplot(x, err, name):
+    '''
+    x: array of 2, first is the average value of 33 cancer
+       second is the average value of 33 + 1 normal
+    error: same as x
+    '''
+    x_label = ['33', '33+1']
+    width = 0.3
+    y_pos = (width/6, width*2)
+    plt.bar(x=y_pos, height=x, yerr=err, width=0.2, align='center', color=['blue', 'orange'])
+    plt.grid()
+    plt.xticks(y_pos, x_label)
+    plt.ylabel('Average Accuracy')
+    plt.xlabel('Cases')
+    plt.gca().set_xlim([-0.4,1.1])
+    plt.savefig('result_%s.png' % name, bbox_inches='tight', format='png', dpi=1000)
+
+
+def noiseplot(x, err):
+    '''
+     x: array of array of noisy input
+     err: same as x
+    '''
+    
+    
+#%%
+prebarplot([0.9547, 0.9464], [0.61/100, 0.65/100],'1DCNN')
+prebarplot([0.9501, 0.9491], [0.43/100, 0.37/100],'2DCNNV')
+prebarplot([0.9567, 0.9447], [0.44/100, 1.02/100],'2DCNNH')
+
+#%%
+x1 = np.random.rand(10, 5)
+x2 = np.random.rand(10, 5)
+x3 = np.random.rand(10, 5)
+x = np.vstack((x1, x2, x3))
+cols = ['10%', '50%','100%', '200%', '500%']
+df = pd.DataFrame(x, columns=cols)
+exp = ['1D CNN'] * 10 + ['2D Vanilla CNN '] * 10 + ['2D Hybrid CNN'] * 10 
+df['models'] = exp
+temp = pd.melt(df, id_vars=['models'])
+
+sns.set(style="ticks", palette="bright")
+#sns.set_style("whitegrid")
+ax = sns.boxplot(x='variable', y='value', hue='models', data=temp)
+ax.set_xlabel('Noise Level', fontsize=12)
+ax.set_ylabel('Average Accuracy', fontsize=12)
+ax.yaxis.grid(True) 
+ax.xaxis.grid(False)
+plt.title('Average Performance of Robustness', fontsize=18)
+plt.legend(title='Model', loc='center right',bbox_to_anchor=(1.3, 0.55))
+#%%
+x = [0.94, 0.95]
+err = [0.44/100, 0.53/100]
+x_label = ['33', '33+1']
+width = 0.3
+y_pos = (width/6, width*2)
+plt.bar(x=y_pos, height=x, yerr=err, width=0.2, align='center', color=['blue', 'orange'])
+plt.grid()
+plt.xticks(y_pos, x_label)
+plt.ylabel('Average Accuracy')
+plt.xlabel('model')
+plt.gca().set_xlim([-0.4,1.1])
