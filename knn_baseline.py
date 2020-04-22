@@ -39,7 +39,6 @@ rf_all, rf_can = [], []
 test_size = 1000 #Approximately 10% of data
 np.random.seed(1234)
 n_num = int(sys.argv[2])
-n_e = 1000
 
 for r in range(10): #10 reps
 	start_time = time.time()
@@ -80,5 +79,3 @@ for r in range(10): #10 reps
 print("finished.", noise_level)
 print(results_all)
 print(results_can)
-print(rf_all)
-print(rf_can)
